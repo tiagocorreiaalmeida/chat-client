@@ -1,0 +1,7 @@
+mutation Register($data: RegisterUserInput!) {
+  register(data: $data) {
+    id
+    username
+    email
+  }
+}

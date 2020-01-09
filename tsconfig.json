@@ -1,13 +1,25 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "outDir": "./dist",
     "rootDir": "./src",
     "sourceMap": true,
-    "noImplicitAny": true,
     "module": "CommonJS",
     "target": "ES6",
+    "lib": ["ES6", "DOM"],
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "paths": {
+      "#Assets/*": ["./assets/*"],
+      "#Components/*": ["./components/*"],
+      "#Features/*": ["./features/*"],
+      "#Generated/*": ["./generated/*"],
+      "#Base/*": ["./*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
