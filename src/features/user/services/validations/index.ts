@@ -1,2 +1,2 @@
-export * from './registration';
+export * from './register';
 export * from './errorMessages';

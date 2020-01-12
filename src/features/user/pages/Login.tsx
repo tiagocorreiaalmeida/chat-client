@@ -6,29 +6,28 @@ import {
   InputAdornment,
   CircularProgress,
 } from '@material-ui/core';
-import { Face, Email, Lock } from '@material-ui/icons';
+import { Email, Lock } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 
-import { useRegisterMutation } from '#Base/generated/graphql';
+import { useLoginMutation } from '#Base/generated/graphql';
 import { Container, Content } from '#Features/user/components/AuthWrapper';
 import { Alert } from '#Components/Alert';
 import { validInputAndGetError, getApolloClientError } from '#Base/utils';
-import { userRegisterValidation } from '#Features/user/services/validations';
+import { setEmailValidation } from '#Features/user/services/validations';
 
-const Register: React.FC = () => {
-  const [register, { loading, data }] = useRegisterMutation();
+const Login: React.FC = () => {
+  const [login, { loading, data }] = useLoginMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
+  const history = useHistory();
 
-  const onRegisterSubmit = async (e: React.FormEvent): Promise<void> => {
+  const onLoginSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setError('');
 
-    const inputValidationError = validInputAndGetError(userRegisterValidation, {
+    const inputValidationError = validInputAndGetError(setEmailValidation, {
       email,
-      password,
-      username,
     });
 
     if (inputValidationError) {
@@ -37,15 +36,16 @@ const Register: React.FC = () => {
     }
 
     try {
-      await register({
+      await login({
         variables: {
           data: {
             email,
             password,
-            username,
           },
         },
       });
+
+      history.push('/dashboard');
     } catch (e) {
       setError(getApolloClientError(e));
     }
@@ -59,10 +59,14 @@ const Register: React.FC = () => {
     updateStateFn(value);
   };
 
+  const onRegisterClick = (): void => {
+    history.push('/register');
+  };
+
   return (
     <Container maxWidth="sm">
       <Content elevation={3}>
-        <form onSubmit={onRegisterSubmit}>
+        <form onSubmit={onLoginSubmit}>
           <FormControl fullWidth margin="normal">
             <TextField
               id="email"
@@ -78,27 +82,6 @@ const Register: React.FC = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <Email />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal">
-            <TextField
-              id="username"
-              variant="outlined"
-              type="text"
-              label="Username"
-              placeholder="Your Username"
-              required
-              value={username}
-              onChange={(e): void => onInputTextFieldChange(e, setUsername)}
-              disabled={loading}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Face />
                   </InputAdornment>
                 ),
               }}
@@ -127,9 +110,6 @@ const Register: React.FC = () => {
           </FormControl>
           {loading && <CircularProgress />}
           {error && !data && <Alert variant="error" message={error} />}
-          {data?.register && (
-            <Alert variant="success" message="A confirmation email was submited" />
-          )}
 
           <FormControl fullWidth margin="normal">
             <Button
@@ -139,7 +119,19 @@ const Register: React.FC = () => {
               type="submit"
               disabled={loading}
             >
-              Sign up
+              Login
+            </Button>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <Button
+              color="primary"
+              variant="contained"
+              size="large"
+              disabled={loading}
+              onClick={onRegisterClick}
+            >
+              Register
             </Button>
           </FormControl>
         </form>
@@ -148,4 +140,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default Login;

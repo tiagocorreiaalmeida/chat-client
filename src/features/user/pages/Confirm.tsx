@@ -38,20 +38,20 @@ const Confirm: React.FC = () => {
     confirmUser();
   }, []);
 
-  const onGoToSignInClick = (): void => {
+  const onGoToLoginClick = (): void => {
     history.push('/');
   };
 
   return (
-    <Container>
-      <Content>
+    <Container maxWidth="sm">
+      <Content elevation={3}>
         {loading && <CircularProgress />}
         {renderError()}
         {data?.confirmUser && <Alert variant="success" message="User confirmed with success" />}
 
         <FormControl fullWidth margin="normal">
-          <Button color="primary" variant="contained" size="large" onClick={onGoToSignInClick}>
-            Go to Sign In
+          <Button color="primary" variant="contained" size="large" onClick={onGoToLoginClick}>
+            Go to login
           </Button>
         </FormControl>
       </Content>
