@@ -14,6 +14,7 @@ module.exports = (env) => {
     output: {
       filename: 'bundle.js',
       path: path.resolve(__dirname, 'dist'),
+      publicPath: '/',
     },
 
     resolve: {
@@ -35,6 +36,7 @@ module.exports = (env) => {
     devServer: {
       port: 9000,
       open: true,
+      historyApiFallback: true,
     },
     plugins: [
       new HtmlWebpackPlugin({
